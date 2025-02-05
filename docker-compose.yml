@@ -1,0 +1,55 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.php
+    volumes:
+      - ./src/fuelphp-1.8.2:/var/www/html
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nginx
+    ports:
+      - "9000:80"
+    volumes:
+      - ./src/fuelphp-1.8.2:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - php
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: fuelphp
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+
+  db_test:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: fuelphp_test
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_test_data:/var/lib/mysql
+    ports:
+      - "3310:3306"
+    networks:
+      - app-network
+
+volumes:
+  db_data: {}
+  db_test_data: {}
+
+networks:
+  app-network:
