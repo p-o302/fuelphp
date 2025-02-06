@@ -154,7 +154,7 @@ return array(
 	 *  PHP set_locale() setting. Use null to not set.
 	 */
 
-	// 'locale' => 'en_US',
+	'locale' => 'en_US',
 
 	/**
 	 * -------------------------------------------------------------------------
@@ -162,7 +162,7 @@ return array(
 	 * -------------------------------------------------------------------------
 	 */
 
-	// 'encoding' => 'UTF-8',
+	'encoding' => 'UTF-8',
 
 	/**
 	 * -------------------------------------------------------------------------
@@ -180,7 +180,7 @@ return array(
 	 *  Change the server's default timezone. This is optional.
 	 */
 
-	// 'default_timezone' => null,
+	'default_timezone' => null,
 
 	/**
 	 * -------------------------------------------------------------------------
@@ -199,7 +199,7 @@ return array(
 	 */
 
 	// 'log_threshold'   => Fuel::L_WARNING,
-	// 'log_path'        => APPPATH.'logs/',
+	'log_path'        => APPPATH.'logs/',
 	// 'log_date_format' => 'Y-m-d H:i:s',
 
 	/**

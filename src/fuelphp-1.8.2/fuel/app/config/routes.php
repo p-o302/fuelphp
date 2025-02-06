@@ -18,7 +18,7 @@ return array(
 	 *
 	 */
 
-	'_root_' => 'welcome/index',
+	'_root_' => 'user/index',
 
 	/**
 	 * -------------------------------------------------------------------------
@@ -39,4 +39,13 @@ return array(
 	 */
 
 	'hello(/:name)?' => array('welcome/hello', 'name' => 'hello'),
+
+	// url => fnc in controllers
+	'prefecture/(:num)' => 'user/index/prefecture/$1',
+	'hotel/(:num)' => 'user/index/hotel/$1',
+
+	//admin
+	'admin' => 'admin/index',
+	'admin/login' => 'admin/login',
+
 );
