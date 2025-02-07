@@ -24,7 +24,9 @@ class Controller_User_Index extends Controller_Template
         $data['prefectures'] = Model_Prefecture::find('all');
         $data['hotels'] = Model_Hotel::query()
             ->related('prefecture')
-            ->limit(19)
+            ->where('status', 1)
+            ->order_by(DB::expr('RAND()'))
+            ->limit(18)
             ->get();
         $this->template->set_global('content', View::forge('user/hotel/index', $data));
     }
@@ -36,6 +38,7 @@ class Controller_User_Index extends Controller_Template
         $data['prefecture'] = Model_Prefecture::find($prefecture_id);
         $data['hotels'] = Model_Hotel::query()
             ->related('prefecture')
+            ->where('status', 1)
             ->where('prefecture_id', $prefecture_id)
             ->get();
 

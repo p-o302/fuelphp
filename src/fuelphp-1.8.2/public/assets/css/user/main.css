@@ -6,3 +6,25 @@
 .zoom-effect:hover {
     transform: scale(1.05);
 }
+.text-danger{
+    color: red;
+}
+.status-active {
+    color: #28a745;
+    font-weight: bold;
+    background-color: #e9f7e9;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.status-inactive {
+    color: #dc3545;
+    font-weight: bold;
+    background-color: #f8d7da;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    display: inline-block;
+}

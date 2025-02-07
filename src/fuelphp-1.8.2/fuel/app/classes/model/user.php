@@ -8,7 +8,7 @@ class Model_User extends Orm\Model
             'data_type' => 'varchar',
             'label' => 'Name',
             'validation' => [
-                'required', 
+                'required',
                 'min_length' => [2],
                 'max_length' => [255],
             ],
@@ -21,7 +21,7 @@ class Model_User extends Orm\Model
                 'min_length' => [6],
             ],
         ],
-        'group_id',
+        'role_id',
         'email' => [
             'data_type' => 'varchar',
             'label' => 'Email',
@@ -73,4 +73,15 @@ class Model_User extends Orm\Model
             'cascade_delete' => false,
         ],
     ];
+
+    protected static $_belongs_to = [
+        'role' => [
+            'key_from' => 'role_id', 
+            'model_to' => 'Model_Role',
+            'key_to' => 'id',
+            'cascade_save' => true,
+            'cascade_delete' => false,
+        ],
+    ];
+
 }

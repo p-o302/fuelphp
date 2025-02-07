@@ -19,6 +19,9 @@ use Fuel\Core\Uri; ?>
 
     <!-- jQuery (for Bootstrap JS components to work) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
     <!-- Optional: Your Custom CSS (if any) -->
     <?= Asset::css('user/main.css'); ?>

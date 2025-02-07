@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Fuel is a fast, lightweight, community driven PHP 5.4+ framework.
  *
@@ -45,7 +46,14 @@ return array(
 	'hotel/(:num)' => 'user/index/hotel/$1',
 
 	//admin
-	'admin' => 'admin/index',
-	'admin/login' => 'admin/login',
+	'admin' => 'admin/hotel/index',
+
+	'admin/prefecture' => 'admin/prefecture/index',
+	'admin/prefecture/create' => 'admin/prefecture/create',
+	'admin/hotel/create' => 'admin/hotel/create',
+	'admin/hotel/update/(:num)' => 'admin/hotel/update/$1',
+	'admin/hotel/status/(:num)' => 'admin/hotel/status/$1',
+	// 'admin/user' => 'admin/user',
+
 
 );
