@@ -1,30 +1,63 @@
 /* Thêm hiệu ứng zoom cho ảnh */
 .zoom-effect {
-    transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .zoom-effect:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
-.text-danger{
-    color: red;
+.text-danger {
+  color: red;
 }
 .status-active {
-    color: #28a745;
-    font-weight: bold;
-    background-color: #e9f7e9;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 14px;
-    display: inline-block;
+  color: #28a745;
+  font-weight: bold;
+  background-color: #e9f7e9;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: inline-block;
 }
 
 .status-inactive {
-    color: #dc3545;
-    font-weight: bold;
-    background-color: #f8d7da;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 14px;
-    display: inline-block;
+  color: #dc3545;
+  font-weight: bold;
+  background-color: #f8d7da;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: inline-block;
+}
+#exampleModal {
+  margin-top: 10%;
+}
+.form-auth {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+.a-login,
+.a-login:hover {
+  color: #fff;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+}
+.reset-password {
+  background: #e7f3ff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 800px;
+  margin: auto;
+}
+.back-to-login {
+  color: #007bff;
+  text-decoration: none;
+}
+.back-to-login:hover {
+  text-decoration: underline;
+}
+.user-icon {
+    color: white !important;
 }

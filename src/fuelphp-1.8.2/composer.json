@@ -13,7 +13,9 @@
         "fuel/oil": "1.8.*",
         "fuel/orm": "1.8.*",
         "fuel/parser": "1.8.*",
-        "fuelphp/upload": "2.0.6"
+        "fuelphp/upload": "2.0.6",
+        "phpmailer/phpmailer": "^6.9",
+        "phpoffice/phpspreadsheet": "^1.23"
     },
     "require-dev": {
         "fuel/docs": "1.8.*"
@@ -28,7 +30,10 @@
         "zordius/lightncandy": "Allow Handlebars templating with an extremely fast PHP implementation of handlebars"
     },
     "config": {
-        "vendor-dir": "fuel/vendor"
+        "vendor-dir": "fuel/vendor",
+        "allow-plugins": {
+            "composer/installers": true
+        }
     },
     "extra": {
         "installer-paths": {

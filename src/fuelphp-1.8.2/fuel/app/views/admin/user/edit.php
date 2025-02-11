@@ -3,13 +3,14 @@
     <div class="col-md-9">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Add New User</h4>
+                <h4 class="mb-0">Edit New User</h4>
             </div>
             <div class="card-body">
-                <form action="/admin/user/store" method="POST" enctype="multipart/form-data">
+                <form action="/admin/user/update/<?= $user->id ?>" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="<?= $user->id ?>">
                     <div class="mb-3">
                         <label for="username" class="form-label">User Name</label>
-                        <input type="text" class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>" id="username" name="username" placeholder="Enter User Name" value="<?= Input::post('username') ?>">
+                        <input type="text" class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>" id="username" name="username" placeholder="Enter User Name" value="<?= Input::post('username', $user->username) ?>">
                         <?php if (!empty($errors) && isset($errors['username'])): ?>
                             <div class="text-danger">
                                 <?php echo $errors['username']; ?>
@@ -18,28 +19,37 @@
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">User Email</label>
-                        <input type="text" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" id="email" name="email" placeholder="Enter User Email" value="<?= Input::post('email') ?>">
+                        <input type="text" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" id="email" name="email" placeholder="Enter User Email" value="<?= Input::post('email', $user->email) ?>">
                         <?php if (!empty($errors) && isset($errors['email'])): ?>
                             <div class="text-danger">
                                 <?php echo $errors['email']; ?>
                             </div>
                         <?php endif; ?>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="password" class="form-label">User Password</label>
-                        <input type="text" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" id="password" name="password" placeholder="Enter User Password" value="<?= Input::post('password') ?>">
+                        <div class="d-flex">
+                            <div class="input-group">
+                                <input type="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" id="password" name="password" placeholder="Enter User Password" value="<?= Input::post('password') ?>">
+                                <button type="button" class="btn btn-outline-secondary" id="toggle-password">
+                                    Show
+                                </button>
+                            </div>
+                        </div>
                         <?php if (!empty($errors) && isset($errors['password'])): ?>
                             <div class="text-danger">
                                 <?php echo $errors['password']; ?>
                             </div>
                         <?php endif; ?>
-                    </div>
+                    </div> -->
                     <div class="mb-3">
                         <label for="role_id" class="form-label">Roles</label>
                         <select class="form-select <?= isset($errors['role_id']) ? 'is-invalid' : '' ?>" id="role_id" name="role_id">
                             <option value="" disabled selected>Select Role</option>
                             <?php foreach ($roles as $role): ?>
-                                <option value="<?= $role->id ?>" <?= (Input::post('role_id') == $role->id) ? 'selected' : '' ?>><?= $role->name ?></option>
+                                <option value="<?= $role->id ?>"
+                                    <?= (Input::post('role_id', $user->role_id) == $user->role_id) ? 'selected' : '' ?>><?= $role->name ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <?php if (isset($errors['role_id'])): ?>

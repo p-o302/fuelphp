@@ -6,6 +6,8 @@ use Fuel\Core\Input;
 use Fuel\Core\Validation;
 use Fuel\Core\Session;
 use Fuel\Core\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Controller_Admin_Role extends Controller_Template
 {
@@ -14,17 +16,26 @@ class Controller_Admin_Role extends Controller_Template
     public function before()
     {
         parent::before();
+        Controller_Auth::checkAdmin();
         $this->template = View::forge('user/template');
     }
 
     public function action_index()
     {
         $data = [];
+        $order = Input::get('order', 'desc');
         $data['roles'] = Model_Role::query()
-            ->order_by('id', 'desc')
+            ->order_by('id', $order)
             ->get();
 
-        $this->template->content = View::forge('admin/role/index', $data);
+        $this->template->content = View::forge('admin/role/index', 
+            [
+                'roles' => $data['roles'],
+                'searchQuery' => [
+                    'order' => $order
+                ]
+            ]
+        );
     }
 
     public function action_create()
@@ -111,7 +122,7 @@ class Controller_Admin_Role extends Controller_Template
 
         return Response::redirect('/admin/role');
     }
-    
+
     public function action_search()
     {
         $role_name = Input::get('role_name', '');
@@ -127,5 +138,35 @@ class Controller_Admin_Role extends Controller_Template
                 'role_name' => $role_name
             ]
         ]);
+    }
+
+    public function action_export_excel()
+    {
+        $roles = Model_Role::find('all');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Username');
+        $sheet->setCellValue('C1', 'Status');
+
+        $row = 2;
+        foreach ($roles as $role) {
+            $sheet->setCellValue('A' . $row, $role->id);
+            $sheet->setCellValue('B' . $row, $role->name);
+            $sheet->setCellValue('C' . $row, ($role->status == 1) ? 'Active' : 'Inactive');
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'roles_export.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 }

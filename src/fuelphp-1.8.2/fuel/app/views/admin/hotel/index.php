@@ -6,6 +6,15 @@ use Fuel\Core\Asset; ?>
     <!-- Sidebar -->
     <?= \Fuel\Core\View::forge('admin/sidebar'); ?>
     <div class="col-md-9">
+        <?php if (Session::get_flash('success')): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo Session::get_flash('success'); ?>
+            </div>
+        <?php elseif (Session::get_flash('error')): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo Session::get_flash('error'); ?>
+            </div>
+        <?php endif; ?>
         <h3 class="text-center mb-4">ホテル一覧</h3>
         <div class="header-lists d-flex mb-4">
             <form class="d-flex" method="get" action="/admin/hotel/search">
@@ -14,12 +23,23 @@ use Fuel\Core\Asset; ?>
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             <a href="/admin/hotel/create" class="btn btn-primary ms-2"><i class="fa-solid fa-plus"></i> 新規追加</a>
+            <a href="/admin/hotel/export_excel" class="btn btn-success ms-2"><i class="fas fa-file-excel"></i> Export Excel</a>
         </div>
 
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>#ID</th>
+                    <th>
+                        <div class="d-flex align-items-center">
+                            #ID
+                            <a href="?order=asc" class="ms-2">
+                                <i class="fas fa-arrow-up <?= (Input::get('order', 'desc') == 'asc') ? 'text-primary' : '' ?>"></i>
+                            </a>
+                            <a href="?order=desc" class="ms-1">
+                                <i class="fas fa-arrow-down <?= (Input::get('order', 'desc') == 'desc') ? 'text-primary' : '' ?>"></i>
+                            </a>
+                        </div>
+                    </th>
                     <th>ホテル名</th>
                     <th>場所</th>
                     <th>Img</th>
@@ -27,6 +47,11 @@ use Fuel\Core\Asset; ?>
                 </tr>
             </thead>
             <tbody>
+                <?php if (empty($hotels)): ?>
+                    <tr>
+                        <td colspan="5" class="text-center">No data found.</td>
+                    </tr>
+                <?php endif; ?>
                 <?php foreach ($hotels as $hotel): ?>
                     <tr>
                         <td><?= $hotel->id; ?></td>

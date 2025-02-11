@@ -6,6 +6,8 @@ use Fuel\Core\Input;
 use Fuel\Core\Validation;
 use Fuel\Core\Session;
 use Fuel\Core\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Controller_Admin_Prefecture extends Controller_Template
 {
@@ -14,19 +16,26 @@ class Controller_Admin_Prefecture extends Controller_Template
     public function before()
     {
         parent::before();
+        Controller_Auth::checkAdmin();
         $this->template = View::forge('user/template');
     }
 
     public function action_index()
     {
         $data = [];
+        $order = Input::get('order', 'desc');
         $data['prefectures'] = Model_Prefecture::query()
             ->where('status', 1)
-            ->order_by('id', 'desc')
+            ->order_by('id', $order)
             ->limit(19)
             ->get();
 
-        $this->template->content = View::forge('admin/prefecture/index', $data);
+        $this->template->content = View::forge('admin/prefecture/index', [
+            'prefectures' => $data['prefectures'],
+            'searchQuery' => [
+                'order' => $order
+            ]
+        ]);
     }
 
     public function action_create()
@@ -169,5 +178,37 @@ class Controller_Admin_Prefecture extends Controller_Template
                 'prefecture_name' => $prefecture_name
             ]
         ]);
+    }
+
+    public function action_export_excel()
+    {
+        $prefectures = Model_Prefecture::find('all');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', '都道府県名_EN');
+        $sheet->setCellValue('C1', '都道府県名_JP');
+        $sheet->setCellValue('D1', 'Status');
+
+        $row = 2;
+        foreach ($prefectures as $prefecture) {
+            $sheet->setCellValue('A' . $row, $prefecture->id);
+            $sheet->setCellValue('B' . $row, $prefecture->name_en);
+            $sheet->setCellValue('C' . $row, $prefecture->name_jp);
+            $sheet->setCellValue('D' . $row, ($prefecture->status == 1) ? 'Active' : 'Inactive');
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'prefecture_export.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 }

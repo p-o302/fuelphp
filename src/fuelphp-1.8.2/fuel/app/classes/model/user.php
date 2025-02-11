@@ -22,6 +22,7 @@ class Model_User extends Orm\Model
             ],
         ],
         'role_id',
+        'group_id',
         'email' => [
             'data_type' => 'varchar',
             'label' => 'Email',
@@ -34,7 +35,8 @@ class Model_User extends Orm\Model
         'last_login',
         'previous_login',
         'login_hash',
-        'user_id',
+        'reset_token',
+        'reset_token_expires_at',
         'status' => [
             'data_type' => 'tinyint',
             'label' => 'Status',
@@ -63,6 +65,7 @@ class Model_User extends Orm\Model
     protected static $_to_array_exclude = [
         'password'
     ];
+    protected static $_timestamp = true;
 
     protected static $_has_many = [
         'booking_list' => [

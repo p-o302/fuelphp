@@ -6,6 +6,8 @@ use Fuel\Core\Input;
 use Fuel\Core\Validation;
 use Fuel\Core\Session;
 use Fuel\Core\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Controller_Admin_Hotel extends Controller_Template
 {
@@ -14,20 +16,29 @@ class Controller_Admin_Hotel extends Controller_Template
     public function before()
     {
         parent::before();
+        Controller_Auth::checkAdmin();
         $this->template = View::forge('user/template');
     }
 
     public function action_index()
     {
         $data = [];
+        $order = Input::get('order', 'desc');
         $data['prefectures'] = Model_Prefecture::find('all');
         $data['hotels'] = Model_Hotel::query()
             ->related('prefecture')
             ->where('status', 1)
-            ->order_by('id', 'desc')
+            ->order_by('id', $order)
             ->limit(19)
             ->get();
-        $this->template->content = View::forge('admin/hotel/index', $data);
+
+        $this->template->content = View::forge('admin/hotel/index', [
+            'hotels' => $data['hotels'],
+            'prefectures' => $data['prefectures'],
+            'searchQuery' => [
+                'order' => $order
+            ]
+        ]);
     }
 
     public function action_hotel()
@@ -186,5 +197,36 @@ class Controller_Admin_Hotel extends Controller_Template
                 'prefecture_name' => $prefecture_name
             ]
         ]);
+    }
+    public function action_export_excel()
+    {
+        $hotels = Model_Hotel::find('all');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'ホテル名');
+        $sheet->setCellValue('C1', '場所');
+        $sheet->setCellValue('D1', 'Status');
+
+        $row = 2;
+        foreach ($hotels as $hotel) {
+            $sheet->setCellValue('A' . $row, $hotel->id);
+            $sheet->setCellValue('B' . $row, $hotel->name);
+            $sheet->setCellValue('C' . $row, isset($hotel->prefecture->name_jp) ? $hotel->prefecture->name_jp : 'N/A');
+            $sheet->setCellValue('D' . $row, ($hotel->status == 1) ? 'Active' : 'Inactive');
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'hotels_export.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
     }
 }
