@@ -156,6 +156,18 @@ class Controller_Admin_User extends Controller_Template
         Session::set_flash('error', 'Form validation error!');
     }
 
+    public function action_status($user_id)
+    {
+        if (empty($user_id)) {
+            return Response::redirect('/admin/role');
+        }
+        $user = Model_User::find($user_id);
+        $user->status = 0;
+        $user->save();
+        Session::set_flash('success', 'Deleted successfully!');
+
+        return Response::redirect('/admin/user');
+    }
     public function action_changepassword()
     {
         if (Input::method() == 'POST') {
